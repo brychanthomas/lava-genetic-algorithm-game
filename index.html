@@ -28,8 +28,7 @@ var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
 var player;
-var obstacles;
-var cursors;
+var spaceKey;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
@@ -38,29 +37,23 @@ function preload () { //this function loads images before the game starts
 }
 
 function create () { //this function creates sprites at the start of the game
-  player = this.physics.add.sprite(300, 300, 'circle'); //create the player sprite
+  player = this.physics.add.sprite(200, 300, 'circle'); //create the player sprite
   player.setScale(0.4); //make it appear smaller
-
-  cursors = this.input.keyboard.createCursorKeys(); //creates an object containing hotkeys
 
   obstacles = this.physics.add.staticGroup(); //create group for obstacles
 
   this.cameras.main.setBackgroundColor('#99ff66');
 
+  spaceKey = this.input.keyboard.addKey('space');
+
 }
 
 function update () { //this function runs every frame
-  if (cursors.up.isDown) {
-      player.setVelocityY(-200); //move up
-  }
-  else if (cursors.down.isDown) {
-      player.setVelocityY(200); //move down
-  }
-  else {
-      player.setVelocityY(0); //don't move up or down
+  if (this.input.keyboard.checkDown(spaceKey, 200)) {
+    player.y = player.y-20;
   }
 
-  this.cameras.main.centerOn(player.x, player.y); //centre camera on current position of player
+  //this.cameras.main.centerOn(player.x, player.y); //centre camera on current position of player
 }
 
 </script>
