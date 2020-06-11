@@ -7,10 +7,29 @@
 
 <script>
 
+class Lava {
+  constructor(y, game) {
+    this.image1 = game.add.image(Math.floor(Math.random() * 401)-200, y, 'lava1');
+    this.image1.setScale(6);
+    this.image2 = game.add.image(this.image1.x+810, y, 'lava2')
+    this.image2.setScale(6);
+  }
+  update() {
+    this.image1.x = this.image1.x+1;
+    this.image2.x = this.image2.x+1;
+    if (this.image1.x-405 > 400) {
+      this.image1.x = this.image2.x-810;
+    } else if (this.image2.x-405 > 400) {
+      this.image2.x = this.image1.x-810;
+    }
+  }
+}
+
 var config = { //create configuration for game
   type: Phaser.CANVAS,
   width: 400, //size of window
   height: 600,
+  pixelArt: true,
   physics: {
     default: 'arcade', //the physics engine the game will use
     arcade: {
@@ -28,11 +47,13 @@ var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
 var player;
+var lava;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
-  this.load.image('floor', 'assets/floor.jpg');
   this.load.image('circle', 'assets/circle.png');
+  this.load.image('lava1', 'assets/lava1.png');
+  this.load.image('lava2', 'assets/lava2.png');
 }
 
 function create () { //this function creates sprites at the start of the game
@@ -45,18 +66,19 @@ function create () { //this function creates sprites at the start of the game
 
   this.input.keyboard.on('keydown', moveUp);
 
+  lava = new Lava(100, this);
+
 }
 
 function update () { //this function runs every frame
-
-  //this.cameras.main.centerOn(player.x, player.y); //centre camera on current position of player
+  lava.update();
+  this.cameras.main.centerOn(player.x, player.y); //centre camera on current position of player
 }
 
 function moveUp() {
-  player.y = player.y-20;
+  player.y = player.y-40;
 }
 
 </script>
-
 </body>
 </html>
