@@ -17,6 +17,8 @@ class Lava {
     this.rockImage.setScale(6);
     this.speed = 2;
   }
+
+  //move the lava
   update() {
     //move both sprites right
     this.image1.x = this.image1.x + this.speed;
@@ -33,7 +35,15 @@ class Lava {
     if (this.rockImage.x - (this.rockImage.displayWidth/2) > 400) {
       this.rockImage.x = -this.rockImage.displayWidth/2
     }
+  }
 
+  //check if it is safe for the player to stand on the lava
+  //(whether the rock is under their x coordinate)
+  checkIfSafe() {
+    if (200 > this.rockImage.x-this.rockImage.displayWidth/2 && 200 < this.rockImage.x+this.rockImage.displayWidth/2) {
+      return true
+    }
+    return false;
   }
 }
 
@@ -86,6 +96,7 @@ function create () { //this function creates sprites at the start of the game
 
 function update () { //this function runs every frame
   lava.update();
+  console.log(lava.checkIfSafe());
   lava2.update();
   this.cameras.main.centerOn(player.x, player.y-200);
 }
