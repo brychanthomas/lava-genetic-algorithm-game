@@ -11,17 +11,29 @@ class Lava {
   constructor(y, game) {
     this.image1 = game.add.image(Math.floor(Math.random() * 401)-200, y, 'lava1');
     this.image1.setScale(6);
-    this.image2 = game.add.image(this.image1.x+810, y, 'lava2')
+    this.image2 = game.add.image(this.image1.x+this.image1.displayWidth, y, 'lava2');
     this.image2.setScale(6);
+    this.rockImage = game.add.image(Math.floor(Math.random() * 401), y, 'rock');
+    this.rockImage.setScale(6);
+    this.speed = 2;
   }
   update() {
-    this.image1.x = this.image1.x+1;
-    this.image2.x = this.image2.x+1;
-    if (this.image1.x-405 > 400) {
-      this.image1.x = this.image2.x-810;
-    } else if (this.image2.x-405 > 400) {
-      this.image2.x = this.image1.x-810;
+    //move both sprites right
+    this.image1.x = this.image1.x + this.speed;
+    this.image2.x = this.image2.x + this.speed;
+    //if one sprite is beyond visible edge, move it to the other side
+    if (this.image1.x-(this.image1.displayWidth/2) > 400) {
+      this.image1.x = this.image2.x-this.image1.displayWidth;
+    } else if (this.image2.x-(this.image2.displayWidth/2) > 400) {
+      this.image2.x = this.image1.x-this.image2.displayWidth;
     }
+    //move rock
+    this.rockImage.x = this.rockImage.x + this.speed;
+    //if rock beyond visible edge move it to the other side
+    if (this.rockImage.x - (this.rockImage.displayWidth/2) > 400) {
+      this.rockImage.x = -this.rockImage.displayWidth/2
+    }
+
   }
 }
 
@@ -47,17 +59,18 @@ var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
 var player;
-var lava;
+var lava, lava2;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
   this.load.image('circle', 'assets/circle.png');
   this.load.image('lava1', 'assets/lava1.png');
   this.load.image('lava2', 'assets/lava2.png');
+  this.load.image('rock', 'assets/rock.png');
 }
 
 function create () { //this function creates sprites at the start of the game
-  player = this.physics.add.sprite(200, 300, 'circle'); //create the player sprite
+  player = this.physics.add.sprite(200, 460, 'circle'); //create the player sprite
   player.setScale(0.4); //make it appear smaller
 
   obstacles = this.physics.add.staticGroup(); //create group for obstacles
@@ -67,16 +80,18 @@ function create () { //this function creates sprites at the start of the game
   this.input.keyboard.on('keydown', moveUp);
 
   lava = new Lava(100, this);
+  lava2 = new Lava(220, this);
 
 }
 
 function update () { //this function runs every frame
   lava.update();
-  this.cameras.main.centerOn(player.x, player.y); //centre camera on current position of player
+  lava2.update();
+  this.cameras.main.centerOn(player.x, player.y-200);
 }
 
 function moveUp() {
-  player.y = player.y-40;
+  player.y = player.y-60;
 }
 
 </script>
