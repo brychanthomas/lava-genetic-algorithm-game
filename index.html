@@ -31,9 +31,6 @@ var player;
 var obstacles;
 var cursors;
 
-var yLimit;
-var xLimit;
-
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
   this.load.image('floor', 'assets/floor.jpg');
@@ -48,23 +45,15 @@ function create () { //this function creates sprites at the start of the game
 
   obstacles = this.physics.add.staticGroup(); //create group for obstacles
 
+  this.cameras.main.setBackgroundColor('#99ff66');
+
 }
 
 function update () { //this function runs every frame
-  if (cursors.left.isDown && player.x >= 0) {
-      player.setVelocityX(-200); //go left
-  }
-  else if (cursors.right.isDown && player.x <= xLimit) {
-      player.setVelocityX(200); //go right
-  }
-  else {
-      player.setVelocityX(0); //don't move left or right
-  }
-
-  if (cursors.up.isDown && player.y >= 0) {
+  if (cursors.up.isDown) {
       player.setVelocityY(-200); //move up
   }
-  else if (cursors.down.isDown && player.y <= yLimit) {
+  else if (cursors.down.isDown) {
       player.setVelocityY(200); //move down
   }
   else {
