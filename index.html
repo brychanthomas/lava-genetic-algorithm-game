@@ -28,7 +28,6 @@ var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
 var player;
-var spaceKey;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
@@ -44,16 +43,17 @@ function create () { //this function creates sprites at the start of the game
 
   this.cameras.main.setBackgroundColor('#99ff66');
 
-  spaceKey = this.input.keyboard.addKey('space');
+  this.input.keyboard.on('keydown', moveUp);
 
 }
 
 function update () { //this function runs every frame
-  if (this.input.keyboard.checkDown(spaceKey, 200)) {
-    player.y = player.y-20;
-  }
 
   //this.cameras.main.centerOn(player.x, player.y); //centre camera on current position of player
+}
+
+function moveUp() {
+  player.y = player.y-20;
 }
 
 </script>
