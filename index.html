@@ -105,6 +105,7 @@ var game = new Phaser.Game(config); //create the game object
 //initialise global variables
 var player;
 var lavaSlots = []; //list to store the 10 lava objects
+var dead = false;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
@@ -128,31 +129,56 @@ function create () { //this function creates sprites at the start of the game
   lavaSlots.push(new Lava(-60, this));
   for (let y=0; y<=600; y=y+60) {
     lavaSlots.push(new Lava(y, this));
+    console.log(y, lavaSlots.length-1);
     lavaSlots[lavaSlots.length-1].activated = Math.random() >= 0.5;
     if (lavaSlots[lavaSlots.length-2].activated) {
       lavaSlots[lavaSlots.length-1].activated = false;
     }
   }
-  lavaSlots[6].activated = false; //deactivate lava where player spawns
+  lavaSlots[8].activated = false; //deactivate lava where player spawns
 
 }
 
 function update () { //this function runs every frame
-  lavaSlots.forEach(function(lava, index) {
-    let movedToTop = lava.update();
-    if (movedToTop) {
-      lava.activated = Math.random() >= 0.5;
-      if (lavaSlots[(index+1) % 12].activated) {
-        //if neighbour is activated, deactivate
-        lava.activated = false;
+  if (!dead) {
+    lavaSlots.forEach(function(lava, index) {
+      let movedToTop = lava.update();
+      if (movedToTop) {
+        lava.activated = Math.random() >= 0.5;
+        if (lavaSlots[(index+1) % 12].activated) {
+          //if neighbour is activated, deactivate
+          lava.activated = false;
+        }
       }
-    }
-  });
+      if (player.y === lava.y) {
+        if (!lava.checkIfSafe()) {
+          dead = true;
+        }
+      }
+    });
+  }
   this.cameras.main.centerOn(player.x, player.y-180);
 }
 
 function moveUp() {
   player.y = player.y-60;
+  if(dead) {
+    restart();
+  }
+}
+
+function restart() {
+  lavaSlots[0].activated = false;
+  for (let i=1; i<lavaSlots.length; i++) {
+    lavaSlots[i].activated = Math.random() >= 0.5;
+    if (lavaSlots[i-1].activated) {
+      lavaSlots[i].activated = false;
+    }
+    if (lavaSlots[i].y === player.y) {
+      lavaSlots[i].activated = false;
+    }
+  }
+  dead = false;
 }
 
 </script>
