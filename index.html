@@ -16,24 +16,27 @@ class Lava {
     this.rockImage = game.add.image(Math.floor(Math.random() * 401), y, 'rock');
     this.rockImage.setScale(6);
     this.speed = 2;
+    this._activated = true;
   }
 
   //move the lava
   update() {
+    if (this._activated) {
     //move both sprites right
-    this.image1.x = this.image1.x + this.speed;
-    this.image2.x = this.image2.x + this.speed;
-    //if one sprite is beyond visible edge, move it to the other side
-    if (this.image1.x-(this.image1.displayWidth/2) > 400) {
-      this.image1.x = this.image2.x-this.image1.displayWidth;
-    } else if (this.image2.x-(this.image2.displayWidth/2) > 400) {
-      this.image2.x = this.image1.x-this.image2.displayWidth;
-    }
-    //move rock
-    this.rockImage.x = this.rockImage.x + this.speed;
-    //if rock beyond visible edge move it to the other side
-    if (this.rockImage.x - (this.rockImage.displayWidth/2) > 400) {
-      this.rockImage.x = -this.rockImage.displayWidth/2
+      this.image1.x = this.image1.x + this.speed;
+      this.image2.x = this.image2.x + this.speed;
+      //if one sprite is beyond visible edge, move it to the other side
+      if (this.image1.x-(this.image1.displayWidth/2) > 400) {
+        this.image1.x = this.image2.x-this.image1.displayWidth;
+      } else if (this.image2.x-(this.image2.displayWidth/2) > 400) {
+        this.image2.x = this.image1.x-this.image2.displayWidth;
+      }
+      //move rock
+      this.rockImage.x = this.rockImage.x + this.speed;
+      //if rock beyond visible edge move it to the other side
+      if (this.rockImage.x - (this.rockImage.displayWidth/2) > 400) {
+        this.rockImage.x = -this.rockImage.displayWidth/2
+      }
     }
   }
 
@@ -43,7 +46,19 @@ class Lava {
     if (200 > this.rockImage.x-this.rockImage.displayWidth/2 && 200 < this.rockImage.x+this.rockImage.displayWidth/2) {
       return true
     }
-    return false;
+    return false || !this._activated;
+  }
+
+  set activated(active) {
+    active = Boolean(active);
+    this.rockImage.visible = active;
+    this.image1.visible = active;
+    this.image2.visible = active;
+    this._activated = active;
+  }
+
+  get activated() {
+    return this.activated;
   }
 }
 
@@ -64,6 +79,9 @@ var config = { //create configuration for game
     update: update
   }
 };
+
+//TODO: add 'activated' setters and getters to laval; when deactivated sprites are invisble and checkIfSafe always returns true
+//TODO: add object/list to represent rows on the screen, each with an activated or deactivated lava in it
 
 var game = new Phaser.Game(config); //create the game object
 
@@ -90,6 +108,7 @@ function create () { //this function creates sprites at the start of the game
   this.input.keyboard.on('keydown', moveUp);
 
   lava = new Lava(100, this);
+  lava.activated = false;
   lava2 = new Lava(220, this);
 
 }
