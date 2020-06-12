@@ -15,7 +15,7 @@ class Lava {
     this.image2.setScale(6);
     this.rockImage = game.add.image(Math.floor(Math.random() * 401), y, 'rock');
     this.rockImage.setScale(6);
-    this.speed = 3;
+    this.speed = 6;
     this._activated = true;
     this.game = game;
   }
@@ -97,15 +97,13 @@ var config = { //create configuration for game
   }
 };
 
-//TODO: add 'activated' setters and getters to laval; when deactivated sprites are invisble and checkIfSafe always returns true
-//TODO: add object/list to represent rows on the screen, each with an activated or deactivated lava in it
-
 var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
 var player;
 var lavaSlots = []; //list to store the 10 lava objects
 var dead = false;
+var gameOverText;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
@@ -118,8 +116,11 @@ function preload () { //this function loads images before the game starts
 function create () { //this function creates sprites at the start of the game
   player = this.physics.add.sprite(200, 420, 'circle'); //create the player sprite
   player.setScale(0.4); //make it appear smaller
+  player.depth = 9;
 
-  obstacles = this.physics.add.staticGroup(); //create group for obstacles
+  gameOverText = this.add.text(13, 300, 'GAME OVER\nPress space to respawn', { fontFamily: 'Arial', fontSize: 35, align: 'center'});
+  gameOverText.depth = 10;
+  gameOverText.visible = false;
 
   this.cameras.main.setBackgroundColor('#99ff66');
 
@@ -156,6 +157,9 @@ function update () { //this function runs every frame
         }
       }
     });
+  } else {
+    gameOverText.y = this.cameras.main.midPoint.y;
+    gameOverText.visible = true;
   }
   this.cameras.main.centerOn(player.x, player.y-180);
 }
@@ -179,6 +183,7 @@ function restart() {
     }
   }
   dead = false;
+  gameOverText.visible = false;
 }
 
 </script>
