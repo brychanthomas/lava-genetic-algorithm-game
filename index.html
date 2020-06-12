@@ -15,8 +15,9 @@ class Lava {
     this.image2.setScale(6);
     this.rockImage = game.add.image(Math.floor(Math.random() * 401), y, 'rock');
     this.rockImage.setScale(6);
-    this.speed = 2;
+    this.speed = 3;
     this._activated = true;
+    this.game = game;
   }
 
   //move the lava
@@ -35,7 +36,12 @@ class Lava {
       this.rockImage.x = this.rockImage.x + this.speed;
       //if rock beyond visible edge move it to the other side
       if (this.rockImage.x - (this.rockImage.displayWidth/2) > 400) {
-        this.rockImage.x = -this.rockImage.displayWidth/2
+        this.rockImage.x = -this.rockImage.displayWidth/2 - Math.floor(Math.random() * 301);
+      }
+
+      //if it's off the bottom edge of the screen
+      if (this.y - this.image1.displayHeight/2 > this.game.cameras.main.midPoint.y+300) {
+        this.y = this.game.cameras.main.midPoint.y - 360;
       }
     }
   }
@@ -58,7 +64,17 @@ class Lava {
   }
 
   get activated() {
-    return this.activated;
+    return this._activated;
+  }
+
+  set y(y) {
+    this.image1.y = y;
+    this.image2.y = y;
+    this.rockImage.y = y;
+  }
+
+  get y() {
+    return this.image1.y;
   }
 }
 
@@ -87,7 +103,7 @@ var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
 var player;
-var lava, lava2;
+var lavaSlots = []; //list to store the 10 lava objects
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
@@ -98,7 +114,7 @@ function preload () { //this function loads images before the game starts
 }
 
 function create () { //this function creates sprites at the start of the game
-  player = this.physics.add.sprite(200, 460, 'circle'); //create the player sprite
+  player = this.physics.add.sprite(200, 420, 'circle'); //create the player sprite
   player.setScale(0.4); //make it appear smaller
 
   obstacles = this.physics.add.staticGroup(); //create group for obstacles
@@ -107,17 +123,24 @@ function create () { //this function creates sprites at the start of the game
 
   this.input.keyboard.on('keydown', moveUp);
 
-  lava = new Lava(100, this);
-  lava.activated = false;
-  lava2 = new Lava(220, this);
+  //create the lava objects
+  lavaSlots.push(new Lava(-60, this));
+  for (let y=0; y<=600; y=y+60) {
+    lavaSlots.push(new Lava(y, this));
+    lavaSlots[lavaSlots.length-1].activated = Math.random() >= 0.5;
+    if (lavaSlots[lavaSlots.length-2].activated) {
+      lavaSlots[lavaSlots.length-1].activated = false;
+    }
+  }
+  lavaSlots[6].activated = false; //deactivate lava where player spawns
 
 }
 
 function update () { //this function runs every frame
-  lava.update();
-  console.log(lava.checkIfSafe());
-  lava2.update();
-  this.cameras.main.centerOn(player.x, player.y-200);
+  lavaSlots.forEach(function(lava) {
+    lava.update();
+  })
+  this.cameras.main.centerOn(player.x, player.y-180);
 }
 
 function moveUp() {
