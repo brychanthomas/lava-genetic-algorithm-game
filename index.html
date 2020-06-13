@@ -79,6 +79,31 @@ class Lava {
   }
 }
 
+class Player {
+  constructor(game) {
+    this.sprite = game.physics.add.sprite(200, 420, 'circle');
+    this.sprite.setScale(0.4); //make it appear smaller
+    this.sprite.depth = 9;
+    this.game = game;
+    this.dead = false;
+  }
+
+  moveUp() {
+    if (!this.dead) {
+      this.sprite.y -= 60;
+    }
+  }
+
+  get y() {
+    return this.sprite.y;
+  }
+
+  get x() {
+    return this.sprite.x;
+  }
+
+}
+
 var config = { //create configuration for game
   type: Phaser.CANVAS,
   width: 400, //size of window
@@ -114,17 +139,16 @@ function preload () { //this function loads images before the game starts
 }
 
 function create () { //this function creates sprites at the start of the game
-  player = this.physics.add.sprite(200, 420, 'circle'); //create the player sprite
-  player.setScale(0.4); //make it appear smaller
-  player.depth = 9;
+  player = new Player(this);
 
-  gameOverText = this.add.text(13, 300, 'GAME OVER\nPress space to respawn', { fontFamily: 'Arial', fontSize: 35, align: 'center'});
+  gameOverText = this.add.text(13, 300, 'GAME OVER\nPress R to respawn', { fontFamily: 'Arial', fontSize: 35, align: 'center'});
   gameOverText.depth = 10;
   gameOverText.visible = false;
 
   this.cameras.main.setBackgroundColor('#99ff66');
 
-  this.input.keyboard.on('keydown-SPACE', moveUp);
+  this.input.keyboard.on('keydown-SPACE', player.moveUp.bind(player));
+  this.input.keyboard.on('keydown-R', restart);
 
   //create the lava objects
   lavaSlots.push(new Lava(-60, this));
@@ -141,7 +165,7 @@ function create () { //this function creates sprites at the start of the game
 }
 
 function update () { //this function runs every frame
-  if (!dead) {
+  if (!player.dead) {
     lavaSlots.forEach(function(lava, index) {
       let movedToTop = lava.update();
       if (movedToTop) {
@@ -153,7 +177,7 @@ function update () { //this function runs every frame
       }
       if (player.y === lava.y) {
         if (!lava.checkIfSafe()) {
-          dead = true;
+          player.dead = true;
         }
       }
     });
@@ -162,13 +186,6 @@ function update () { //this function runs every frame
     gameOverText.visible = true;
   }
   this.cameras.main.centerOn(player.x, player.y-180);
-}
-
-function moveUp() {
-  player.y = player.y-60;
-  if(dead) {
-    restart();
-  }
 }
 
 function restart() {
@@ -182,7 +199,7 @@ function restart() {
       lavaSlots[i].activated = false;
     }
   }
-  dead = false;
+  player.dead = false;
   gameOverText.visible = false;
 }
 
