@@ -141,7 +141,7 @@ function preload () { //this function loads images before the game starts
 function create () { //this function creates sprites at the start of the game
   player = new Player(this);
 
-  gameOverText = this.add.text(13, 300, 'GAME OVER\nPress R to respawn', { fontFamily: 'Arial', fontSize: 35, align: 'center'});
+  gameOverText = this.add.text(50, 300, 'GAME OVER\nPress R to respawn', { fontFamily: 'Arial', fontSize: 35, align: 'center'});
   gameOverText.depth = 10;
   gameOverText.visible = false;
 
