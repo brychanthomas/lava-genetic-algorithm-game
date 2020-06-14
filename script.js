@@ -6,7 +6,7 @@ class Lava {
     this.image2.setScale(6);
     this.rockImage = game.add.image(Math.floor(Math.random() * 401), y, 'rock');
     this.rockImage.setScale(6);
-    this.speed = 6;
+    this.speed = 4;
     this._activated = true;
     this.game = game;
   }
@@ -119,6 +119,12 @@ class LavaManager {
     }
   }
 
+  setSpeed(speed) {
+    this.lavaSlots.forEach(function(lava) {
+      lava.speed = speed;
+    });
+  }
+
 }
 
 class Player {
@@ -216,6 +222,7 @@ function spacePressed() {
   score += 1;
   scoreText.y -= 60;
   scoreText.text = "Score: "+score;
+  lavas.setSpeed(4 + 0.2*score);
 }
 
 function restart() {
@@ -223,4 +230,5 @@ function restart() {
   player.dead = false;
   gameOverText.visible = false;
   score = 0;
+  lavas.setSpeed(4);
 }
