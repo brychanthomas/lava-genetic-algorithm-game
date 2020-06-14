@@ -164,7 +164,8 @@ var game = new Phaser.Game(config); //create the game object
 var player;
 var lavas; //list to store the 10 lava objects
 var dead = false;
-var gameOverText;
+var gameOverText, scoreText;
+var score = 0;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
@@ -178,13 +179,23 @@ function create () { //this function creates sprites at the start of the game
   player = new Player(this);
   lavas = new LavaManager(this);
 
-  gameOverText = this.add.text(50, 300, 'GAME OVER\nPress R to respawn', { fontFamily: 'Arial', fontSize: 35, align: 'center'});
+  gameOverText = this.add.text(50, 300, 'GAME OVER\nPress R to respawn', {
+    fontFamily: 'Arial',
+    fontSize: 35,
+    align: 'center'
+  });
   gameOverText.depth = 10;
   gameOverText.visible = false;
 
+  scoreText = this.add.text(0, -40, 'Score: 0', {
+    fontFamily: 'Arial',
+    fontSize: 25
+  });
+  scoreText.depth = 10;
+
   this.cameras.main.setBackgroundColor('#99ff66');
 
-  this.input.keyboard.on('keydown-SPACE', player.moveUp.bind(player));
+  this.input.keyboard.on('keydown-SPACE', spacePressed);
   this.input.keyboard.on('keydown-R', restart);
 
 }
@@ -200,8 +211,16 @@ function update () { //this function runs every frame
   this.cameras.main.centerOn(player.x, player.y-180);
 }
 
+function spacePressed() {
+  player.moveUp();
+  score += 1;
+  scoreText.y -= 60;
+  scoreText.text = "Score: "+score;
+}
+
 function restart() {
   lavas.restart(player.y);
   player.dead = false;
   gameOverText.visible = false;
+  score = 0;
 }
