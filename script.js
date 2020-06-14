@@ -1,3 +1,5 @@
+//class to set up a moving lava river with a rock, update its
+//position, turn it on and off and check if it is safe
 class Lava {
   constructor(y, game) {
     this.image1 = game.add.image(Math.floor(Math.random() * 401)-200, y, 'lava1');
@@ -47,6 +49,8 @@ class Lava {
     return false || !this._activated;
   }
 
+  //turn the lava on or off (determines whether it moves and
+  //whether it is always safe)
   set activated(active) {
     active = Boolean(active);
     this.rockImage.visible = active;
@@ -70,6 +74,10 @@ class Lava {
   }
 }
 
+//class to manage the lava objects - creates them with random
+//activation states, moves them all, checks if the player is
+//safe wherever they are standing, randomly changes their
+//activations when the game restarts and sets their speeds
 class LavaManager {
   constructor(game) {
     this.lavaSlots = [];
@@ -84,6 +92,9 @@ class LavaManager {
     this.lavaSlots[8].activated = false; //deactivate lava where player spawns
   }
 
+  //move all of the lava rivers (so that they seem to be flowing)
+  //and randomly activate or deactivate them when they move from
+  //the bottom to the top
   update() {
     this.lavaSlots.forEach(function(lava, index) {
       let movedToTop = lava.update();
@@ -97,6 +108,7 @@ class LavaManager {
     }.bind(this));
   }
 
+  //check if the player is safe where they are standing
   checkIfPlayerSafe(playerY) {
     for (let lava of this.lavaSlots) {
       if (playerY === lava.y && !lava.checkIfSafe()) {
@@ -106,6 +118,7 @@ class LavaManager {
     return false;
   }
 
+  //randomly activate or deactivate the lava rivers
   restart(playerY) {
     this.lavaSlots[0].activated = false;
     for (let i=1; i<this.lavaSlots.length; i++) {
@@ -119,6 +132,7 @@ class LavaManager {
     }
   }
 
+  //set the speed of the lava rivers
   setSpeed(speed) {
     this.lavaSlots.forEach(function(lava) {
       lava.speed = speed;
@@ -127,6 +141,8 @@ class LavaManager {
 
 }
 
+//class to create player sprite, move them up and store
+//whether they are dead or not
 class Player {
   constructor(game) {
     this.sprite = game.add.sprite(200, 420, 'circle');
@@ -136,6 +152,7 @@ class Player {
     this.dead = false;
   }
 
+  //move player sprite up
   moveUp() {
     if (!this.dead) {
       this.sprite.y -= 60;
@@ -156,7 +173,7 @@ var config = { //create configuration for game
   type: Phaser.CANVAS,
   width: 400, //size of window
   height: 600,
-  pixelArt: true,
+  pixelArt: true, //prevents pixel art from being blurred when scaled
   scene: {
     preload: preload,
     create: create,
@@ -168,7 +185,7 @@ var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
 var player;
-var lavas; //list to store the 10 lava objects
+var lavas;
 var gameOverText, scoreText;
 var score = 0;
 
