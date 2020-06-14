@@ -169,7 +169,6 @@ var game = new Phaser.Game(config); //create the game object
 //initialise global variables
 var player;
 var lavas; //list to store the 10 lava objects
-var dead = false;
 var gameOverText, scoreText;
 var score = 0;
 
@@ -218,11 +217,13 @@ function update () { //this function runs every frame
 }
 
 function spacePressed() {
-  player.moveUp();
-  score += 1;
-  scoreText.y -= 60;
-  scoreText.text = "Score: "+score;
-  lavas.setSpeed(4 + 0.2*score);
+  if (!player.dead) {
+    player.moveUp();
+    score += 1;
+    scoreText.y -= 60;
+    scoreText.text = "Score: "+score;
+    lavas.setSpeed(4 + 0.2*score);
+  }
 }
 
 function restart() {
