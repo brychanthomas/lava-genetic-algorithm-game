@@ -162,11 +162,7 @@ class Player {
   get y() {
     return this.sprite.y;
   }
-
-  get x() {
-    return this.sprite.x;
-  }
-
+  
 }
 
 var config = { //create configuration for game
@@ -230,7 +226,7 @@ function update () { //this function runs every frame
     gameOverText.y = this.cameras.main.midPoint.y;
     gameOverText.visible = true;
   }
-  this.cameras.main.centerOn(player.x, player.y-180);
+  this.cameras.main.centerOn(200, player.y-180);
 }
 
 function spacePressed() {
