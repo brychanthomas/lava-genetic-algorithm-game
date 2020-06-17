@@ -96,16 +96,16 @@ class LavaManager {
   //and randomly activate or deactivate them when they move from
   //the bottom to the top
   update() {
-    this.lavaSlots.forEach(function(lava, index) {
-      let movedToTop = lava.update();
+    for (let i=0; i<this.lavaSlots.length; i++) {
+      let movedToTop = this.lavaSlots[i].update();
       if (movedToTop) {
-        lava.activated = Math.random() >= 0.5;
-        if (this.lavaSlots[(index+1) % 12].activated) {
+        this.lavaSlots[i].activated = Math.random() >= 0.5;
+        if (this.lavaSlots[(i+1) % 12].activated) {
           //if neighbour is activated, deactivate
-          lava.activated = false;
+          this.lavaSlots[i].activated = false;
         }
       }
-    }.bind(this));
+    };
   }
 
   //check if the player is safe where they are standing
@@ -162,7 +162,7 @@ class Player {
   get y() {
     return this.sprite.y;
   }
-  
+
 }
 
 var config = { //create configuration for game
@@ -244,5 +244,6 @@ function restart() {
   player.dead = false;
   gameOverText.visible = false;
   score = 0;
+  scoreText.text = "Score: 0";
   lavas.setSpeed(4);
 }
