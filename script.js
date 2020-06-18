@@ -2,11 +2,11 @@
 //position, turn it on and off and check if it is safe
 class Lava {
   constructor(y, game) {
-    this.image1 = game.add.image(Math.floor(Math.random() * 401)-200, y, 'lava1');
+    this.image1 = game.add.image(Math.floor(Math.random() * 401)-200, y, "lava1");
     this.image1.setScale(6);
-    this.image2 = game.add.image(this.image1.x+this.image1.displayWidth, y, 'lava2');
+    this.image2 = game.add.image(this.image1.x+this.image1.displayWidth, y, "lava2");
     this.image2.setScale(6);
-    this.rockImage = game.add.image(Math.floor(Math.random() * 401), y, 'rock');
+    this.rockImage = game.add.image(Math.floor(Math.random() * 401), y, "rock");
     this.rockImage.setScale(6);
     this.speed = 4;
     this._activated = true;
@@ -145,7 +145,7 @@ class LavaManager {
 //whether they are dead or not
 class Player {
   constructor(game) {
-    this.sprite = game.add.sprite(200, 420, 'circle');
+    this.sprite = game.add.sprite(200, 420, "circle");
     this.sprite.setScale(0.4); //make it appear smaller
     this.sprite.depth = 9;
     this.game = game;
@@ -187,34 +187,34 @@ var score = 0;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
-  this.load.image('circle', 'assets/circle.png');
-  this.load.image('lava1', 'assets/lava1.png');
-  this.load.image('lava2', 'assets/lava2.png');
-  this.load.image('rock', 'assets/rock.png');
+  this.load.image("circle", "assets/circle.png");
+  this.load.image("lava1", "assets/lava1.png");
+  this.load.image("lava2", "assets/lava2.png");
+  this.load.image("rock", "assets/rock.png");
 }
 
 function create () { //this function creates sprites at the start of the game
   player = new Player(this);
   lavas = new LavaManager(this);
 
-  gameOverText = this.add.text(50, 300, 'GAME OVER\nPress R to respawn', {
-    fontFamily: 'Arial',
+  gameOverText = this.add.text(50, 300, "GAME OVER\nPress R to respawn", {
+    fontFamily: "Arial",
     fontSize: 35,
-    align: 'center'
+    align: "center"
   });
   gameOverText.depth = 10;
   gameOverText.visible = false;
 
-  scoreText = this.add.text(0, -40, 'Score: 0', {
-    fontFamily: 'Arial',
+  scoreText = this.add.text(0, -40, "Score: 0", {
+    fontFamily: "Arial",
     fontSize: 25
   });
   scoreText.depth = 10;
 
-  this.cameras.main.setBackgroundColor('#99ff66');
+  this.cameras.main.setBackgroundColor("#99ff66");
 
-  this.input.keyboard.on('keydown-SPACE', spacePressed);
-  this.input.keyboard.on('keydown-R', restart);
+  this.input.keyboard.on("keydown-SPACE", spacePressed);
+  this.input.keyboard.on("keydown-R", restart);
 
 }
 
