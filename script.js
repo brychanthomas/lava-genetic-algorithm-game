@@ -240,10 +240,12 @@ function spacePressed() {
 }
 
 function restart() {
-  lavas.restart(player.y);
-  player.dead = false;
-  gameOverText.visible = false;
-  score = 0;
-  scoreText.text = "Score: 0";
-  lavas.setSpeed(4);
+  if (player.dead) {
+    lavas.restart(player.y);
+    player.dead = false;
+    gameOverText.visible = false;
+    score = 0;
+    scoreText.text = "Score: 0";
+    lavas.setSpeed(4);
+  }
 }
