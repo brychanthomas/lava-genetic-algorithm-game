@@ -65,11 +65,14 @@ class GeneticAlgorithm {
   }
 
   crossover(agent1, agent2) {
+    console.log(agent1.classifier.weights, agent2.classifier.weights);
     let crossoverIndex = Math.floor(Math.random() * agent1.classifier.weights.length);
+    console.log(crossoverIndex);
     let weights = agent1.classifier.weights.splice(0, crossoverIndex);
     weights = weights.concat(agent2.classifier.weights.splice(crossoverIndex));
-    agent1.weights = weights;
+    agent1.classifier.weights = weights;
     agent1.fitness = 0;
+    console.log(agent1.classifier.weights);
     return agent1;
   }
 
@@ -83,14 +86,18 @@ class GeneticAlgorithm {
 
   step(clock) {
     if (clock - this.clockOffset < 10000) {
+      //console.log(clock);
+      //console.log(this.agents.length);
+      //console.log(this.agents[0].classifier.weights);
       for (let i=0; i<this.agents.length; i++) {
         if (!this.agents[i].dead) {
-          if (this.agents[i].decide) {this.agents[i].fitness++}
+          var grass = lavas.checkIfGrass(this.agents[i].y-60);
+          if (!grass) {var rock = lavas.checkIfPlayerSafe(this.agents[i].y-60);}
+          else {var rock = false;}
+          if (this.agents[i].decide(grass, rock)) {this.agents[i].fitness++}
         }
       }
     } else {
-      console.log(clock);
-      console.log(this.agents.length);
       this.agents = this.agents.sort((a, b) => (a.fitness >= b.fitness) ? 1 : -1);
       var newAgents = [];
       var parent1, parent2;
@@ -123,3 +130,6 @@ class GeneticAlgorithm {
     }
   }
 }
+
+//bug where the number of weights decreases to one on some agents
+//and then decreases to 0 next generation
