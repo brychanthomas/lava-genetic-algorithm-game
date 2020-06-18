@@ -184,6 +184,7 @@ var player;
 var lavas;
 var gameOverText, scoreText;
 var score = 0;
+var ga;
 
 function preload () { //this function loads images before the game starts
   //each image is given a name that is used to refer to it later on
@@ -194,16 +195,9 @@ function preload () { //this function loads images before the game starts
 }
 
 function create () { //this function creates sprites at the start of the game
-  player = new Player(this);
   lavas = new LavaManager(this);
+  ga = new GeneticAlgorithm(20, 0.2, this);
 
-  gameOverText = this.add.text(50, 300, "GAME OVER\nPress R to respawn", {
-    fontFamily: "Arial",
-    fontSize: 35,
-    align: "center"
-  });
-  gameOverText.depth = 10;
-  gameOverText.visible = false;
 
   scoreText = this.add.text(0, -40, "Score: 0", {
     fontFamily: "Arial",
@@ -219,19 +213,12 @@ function create () { //this function creates sprites at the start of the game
 }
 
 function update () { //this function runs every frame
-  if (!player.dead) {
-    lavas.update();
-    player.dead = lavas.checkIfPlayerSafe(player.y);
-  } else {
-    gameOverText.y = this.cameras.main.midPoint.y;
-    gameOverText.visible = true;
-  }
-  this.cameras.main.centerOn(200, player.y-180);
+  lavas.update();
+  ga.step(this.time.now);
 }
 
 function spacePressed() {
   if (!player.dead) {
-    player.moveUp();
     score += 1;
     scoreText.y -= 60;
     scoreText.text = "Score: "+score;
