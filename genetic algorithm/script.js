@@ -139,6 +139,14 @@ class LavaManager {
     });
   }
 
+  checkIfGrass(y) {
+    this.lavaSlots.forEach(function(lava) {
+      if (lava.y === y) {
+        return !lava.activated
+      }
+    });
+  }
+
 }
 
 //class to create player sprite, move them up and store
