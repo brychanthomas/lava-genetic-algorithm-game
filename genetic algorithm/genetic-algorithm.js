@@ -1,4 +1,4 @@
-var STEP_TIME = 200;
+var STEP_TIME = 100;
 
 class LogisticRegressionClassifier {
   constructor(noOfParams, threshold) {
@@ -105,20 +105,23 @@ class GeneticAlgorithm {
   update() {
     console.log(this.stepCount);
     this.stepCount++;
-    if (this.stepCount < (10000 / STEP_TIME)) {
+    if (this.stepCount < (20000 / STEP_TIME)) {
       this.makeDecisions();
       setTimeout(this.update.bind(this), STEP_TIME);
     }
   }
 
   makeDecisions() {
-    var bestY = 0;
+    var bestY = Infinity;
     for (let agent of this.population) {
       if (!agent.dead) {
         agent.decide(this.lavas);
         if (agent.y < bestY) {bestY = agent.y;}
       }
     }
+    this.game.cameras.main.midPoint.y = bestY; //if I don't do this the
+    //y coordinates of the lava streams get mucked up because they are based on the
+    //camera position and the camera is at weird positions while it is panning
     this.game.cameras.main.pan(200, bestY, STEP_TIME);
   }
 }
