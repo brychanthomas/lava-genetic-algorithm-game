@@ -70,4 +70,13 @@ class GeneticAlgorithm {
     }
     this.mutationProb = mutationProb;
   }
+
+  crossover(weights1, weights2) {
+    let crossoverIndex = Math.floor(Math.random()*(weights1.length+1));
+    let newWeights = weights1.slice().splice(0, crossoverIndex);
+    newWeights = newWeights.concat(weights2.slice().splice(crossoverIndex));
+    return newWeights;
+  }
+
+
 }
