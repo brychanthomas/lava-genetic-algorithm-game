@@ -42,9 +42,9 @@ class Agent {
       this.player.dead = true;
       return;
     }
-    let grassInFront = lavas.checkIfGrass(this.player.y - 60);
-    if (grassInFront) {let rockInFront = false;}
-    else {let rockInFront = lavas.checkIfPlayerSafe(this.player.y - 60);}
+    let grassInFront = lavas.checkIfGrass(agent.y-60) ? 1 : 0;
+    if (grassInFront) {let rockInFront = 0;}
+    else {let rockInFront = lavas.checkIfSafe() ? 1: 0;}
     this.classifier.predict([grassInFront, rockInFront]);
     this.player.moveUp();
     this.fitness++;
@@ -105,9 +105,6 @@ class GeneticAlgorithm {
   makeDecisions() {
     for (agent of this.population) {
       if (!agent.dead) {
-        let grass = this.lavas.checkIfGrass(agent.y-60) ? 1 : 0;
-        if (grass) {let rock = 0;}
-        else {let rock = this.lavas.checkIfSafe() ? 1: 0;}
         agent.decide(this.lavas);
       }
     }
