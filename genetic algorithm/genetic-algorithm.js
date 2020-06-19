@@ -1,3 +1,5 @@
+var STEP_TIME = 200;
+
 class LogisticRegressionClassifier {
   constructor(noOfParams, threshold) {
     this.weights = [];
@@ -22,7 +24,7 @@ class LogisticRegressionClassifier {
   predict(params) {
     params = [1].concat(params);
     let output = this.sigmoid(this.elementWiseMultiply(this.weights, params));
-    return (output >= this.threshold ? true : false);
+    return (output >= this.threshold);
   }
 }
 
@@ -35,12 +37,17 @@ class Agent {
     this.fitness = 0;
   }
 
-  decide(grassInFront, rockInFront) {
+  decide(lavas) {
     if (!lavas.checkIfPlayerSafe(this.player.y)) {
       this.player.dead = true;
-    } else if (this.classifier.predict([grassInFront, rockInFront])) {
-      this.player.moveUp();
-      this.fitness++;
+      return;
+    }
+    let grassInFront = lavas.checkIfGrass(this.player.y - 60);
+    if (grassInFront) {let rockInFront = false;}
+    else {let rockInFront = lavas.checkIfPlayerSafe(this.player.y - 60);}
+    this.classifier.predict([grassInFront, rockInFront]);
+    this.player.moveUp();
+    this.fitness++;
     }
   }
 
@@ -63,12 +70,14 @@ class Agent {
 }
 
 class GeneticAlgorithm {
-  constructor(populationSize, mutationProb, game) {
+  constructor(populationSize, mutationProb, lavas, game) {
     this.population = [];
     for (let i=0; i<populationSize; i++) {
       this.population.push(new Agent(game));
     }
     this.mutationProb = mutationProb;
+    this.stepCount = 0;
+    this.lavas = lavas;
   }
 
   crossover(weights1, weights2) {
@@ -84,5 +93,23 @@ class GeneticAlgorithm {
       weights[mutationIndex] = (Math.random()*2) - 1;
     }
     return weights;
+  }
+
+  update() {
+    this.stepCount++;
+    if (this.stepCount < 10000 / STEP_TIME) {
+      makeDecisions();
+    }
+  }
+
+  makeDecisions() {
+    for (agent of this.population) {
+      if (!agent.dead) {
+        let grass = this.lavas.checkIfGrass(agent.y-60) ? 1 : 0;
+        if (grass) {let rock = 0;}
+        else {let rock = this.lavas.checkIfSafe() ? 1: 0;}
+        agent.decide(this.lavas);
+      }
+    }
   }
 }
