@@ -38,13 +38,15 @@ class Agent {
   decide(grassInFront, rockInFront) {
     if (!lavas.checkIfPlayerSafe(this.player.y)) {
       this.player.dead = true;
-      return false;
-    }
-    if (this.classifier.predict([grassInFront, rockInFront])) {
+    } else if (this.classifier.predict([grassInFront, rockInFront])) {
       this.player.moveUp();
-      return true;
+      this.fitness++;
     }
-    return false;
+  }
+
+  reset() {
+    this.fitness = 0;
+    this.player.dead = false;
   }
 
   get dead() {
