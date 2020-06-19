@@ -78,5 +78,11 @@ class GeneticAlgorithm {
     return newWeights;
   }
 
-
+  mutate(weights) {
+    if (Math.random() < this.mutationProb) {
+      let mutationIndex = Math.floor(Math.random() * weights.length)
+      weights[mutationIndex] = (Math.random()*2) - 1;
+    }
+    return weights;
+  }
 }
