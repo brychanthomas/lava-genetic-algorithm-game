@@ -47,9 +47,10 @@ class Agent {
     if (grassInFront) {var rockInFront = 0;}
     else {var rockInFront = lavas.checkIfPlayerSafe(this.player.y-60) ? 1: 0;}
     console.log(grassInFront, rockInFront);
-    this.classifier.predict([grassInFront, rockInFront]);
-    this.player.moveUp();
-    this.fitness++;
+    if (this.classifier.predict([grassInFront, rockInFront])) {
+      this.player.moveUp();
+      this.fitness++;
+    }
   }
 
   reset() {
