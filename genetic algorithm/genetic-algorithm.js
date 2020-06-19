@@ -38,7 +38,6 @@ class Agent {
   }
 
   decide(lavas) {
-    console.log("ur");
     if (!lavas.checkIfPlayerSafe(this.player.y)) {
       this.player.dead = true;
       return;
@@ -69,6 +68,10 @@ class Agent {
   set weights(array) {
     this.classifier.weights = array;
   }
+
+  get y() {
+    return this.player.sprite.y;
+  }
 }
 
 class GeneticAlgorithm {
@@ -80,6 +83,7 @@ class GeneticAlgorithm {
     this.mutationProb = mutationProb;
     this.stepCount = 0;
     this.lavas = lavas;
+    this.game = game;
     setTimeout(this.update.bind(this), STEP_TIME);
   }
 
@@ -108,10 +112,13 @@ class GeneticAlgorithm {
   }
 
   makeDecisions() {
+    var bestY = 0;
     for (let agent of this.population) {
       if (!agent.dead) {
         agent.decide(this.lavas);
+        if (agent.y < bestY) {bestY = agent.y;}
       }
     }
+    this.game.cameras.main.pan(200, bestY, STEP_TIME);
   }
 }
