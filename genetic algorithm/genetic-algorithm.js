@@ -52,4 +52,22 @@ class Agent {
   get dead() {
     return this.player.dead;
   }
+
+  get weights() {
+    return this.classifier.weights;
+  }
+
+  set weights(array) {
+    this.classifier.weights = array;
+  }
+}
+
+class GeneticAlgorithm {
+  constructor(populationSize, mutationProb, game) {
+    this.population = [];
+    for (let i=0; i<populationSize; i++) {
+      this.population.push(new Agent(game));
+    }
+    this.mutationProb = mutationProb;
+  }
 }
