@@ -112,10 +112,10 @@ class LavaManager {
   checkIfPlayerSafe(playerY) {
     for (let lava of this.lavaSlots) {
       if (playerY === lava.y && !lava.checkIfSafe()) {
-        return true;
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   //randomly activate or deactivate the lava rivers
@@ -204,7 +204,7 @@ function preload () { //this function loads images before the game starts
 
 function create () { //this function creates sprites at the start of the game
   lavas = new LavaManager(this);
-  ga = new GeneticAlgorithm(20, 0.2, this);
+  ga = new GeneticAlgorithm(100, 0.2, lavas, this);
 
 
   scoreText = this.add.text(0, -40, "Score: 0", {
@@ -215,14 +215,10 @@ function create () { //this function creates sprites at the start of the game
 
   this.cameras.main.setBackgroundColor("#99ff66");
 
-  this.input.keyboard.on("keydown-SPACE", spacePressed);
-  this.input.keyboard.on("keydown-R", restart);
-
 }
 
 function update () { //this function runs every frame
   lavas.update();
-  ga.step(this.time.now);
 }
 
 function spacePressed() {

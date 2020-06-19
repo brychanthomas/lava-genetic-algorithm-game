@@ -38,17 +38,18 @@ class Agent {
   }
 
   decide(lavas) {
+    console.log("ur");
     if (!lavas.checkIfPlayerSafe(this.player.y)) {
       this.player.dead = true;
       return;
     }
-    let grassInFront = lavas.checkIfGrass(agent.y-60) ? 1 : 0;
-    if (grassInFront) {let rockInFront = 0;}
-    else {let rockInFront = lavas.checkIfSafe() ? 1: 0;}
+    var grassInFront = lavas.checkIfGrass(this.player.y-60) ? 1 : 0;
+    if (grassInFront) {var rockInFront = 0;}
+    else {var rockInFront = lavas.checkIfPlayerSafe(this.player.y-60) ? 1: 0;}
+    console.log(grassInFront, rockInFront);
     this.classifier.predict([grassInFront, rockInFront]);
     this.player.moveUp();
     this.fitness++;
-    }
   }
 
   reset() {
@@ -78,6 +79,7 @@ class GeneticAlgorithm {
     this.mutationProb = mutationProb;
     this.stepCount = 0;
     this.lavas = lavas;
+    setTimeout(this.update.bind(this), STEP_TIME);
   }
 
   crossover(weights1, weights2) {
@@ -96,14 +98,16 @@ class GeneticAlgorithm {
   }
 
   update() {
+    console.log(this.stepCount);
     this.stepCount++;
-    if (this.stepCount < 10000 / STEP_TIME) {
-      makeDecisions();
+    if (this.stepCount < (10000 / STEP_TIME)) {
+      this.makeDecisions();
+      setTimeout(this.update.bind(this), STEP_TIME);
     }
   }
 
   makeDecisions() {
-    for (agent of this.population) {
+    for (let agent of this.population) {
       if (!agent.dead) {
         agent.decide(this.lavas);
       }
