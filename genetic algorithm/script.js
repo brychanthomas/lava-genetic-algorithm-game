@@ -72,6 +72,10 @@ class Lava {
   get y() {
     return this.image1.y;
   }
+
+  get rockX() {
+    return this.rockImage.x;
+  }
 }
 
 //class to manage the lava objects - creates them with random
@@ -145,6 +149,14 @@ class LavaManager {
         return !lava.activated
       }
     });
+  }
+
+  getRockX(y) {
+    for (lava in this.lavaSlots) {
+      if (lava.y === y) {
+        return lava.rockX;
+      }
+    }
   }
 
 }
