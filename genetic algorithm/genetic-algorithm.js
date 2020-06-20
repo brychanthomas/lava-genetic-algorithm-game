@@ -148,4 +148,15 @@ class GeneticAlgorithm {
       this.population[i].fitness /= fitnessTotal;
     }
   }
+
+  //choose random agent with greater probability for greater fitnesses
+  pickAgent() {
+    let randNum = Math.random();
+    let i=0;
+    while (randNum >= 0 && i < this.population.length) {
+      randNum -= this.population[i].fitness;
+      i++;
+    }
+    return this.population[i-1];
+  }
 }
