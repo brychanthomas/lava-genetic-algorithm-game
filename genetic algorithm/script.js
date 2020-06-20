@@ -144,17 +144,17 @@ class LavaManager {
   }
 
   checkIfGrass(y) {
-    this.lavaSlots.forEach(function(lava) {
-      if (lava.y === y) {
-        return !lava.activated
+    for (let i=0; i<this.lavaSlots.length; i++) {
+      if (this.lavaSlots[i].y === y) {
+        return !this.lavaSlots[i].activated;
       }
-    });
+    }
   }
 
   getRockX(y) {
-    for (lava in this.lavaSlots) {
-      if (lava.y === y) {
-        return lava.rockX;
+    for (let i=0; i<this.lavaSlots.length; i++) {
+      if (this.lavaSlots[i].y === y) {
+        return this.lavaSlots[i].rockX;
       }
     }
   }
@@ -216,7 +216,7 @@ function preload () { //this function loads images before the game starts
 
 function create () { //this function creates sprites at the start of the game
   lavas = new LavaManager(this);
-  ga = new GeneticAlgorithm(20, 0.2, lavas, this);
+  ga = new GeneticAlgorithm(50, 0.2, lavas, this);
 
 
   scoreText = this.add.text(0, -40, "Score: 0", {

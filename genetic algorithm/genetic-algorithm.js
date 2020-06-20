@@ -1,4 +1,4 @@
-var STEP_TIME = 100;
+var STEP_TIME = 200;
 
 class LogisticRegressionClassifier {
   constructor(noOfParams, threshold) {
@@ -43,10 +43,8 @@ class Agent {
       return;
     }
     var grassInFront = lavas.checkIfGrass(this.player.y-60) ? 1 : 0;
-    if (grassInFront) {var rockInFront = 0;}
-    else {var rockInFront = lavas.checkIfPlayerSafe(this.player.y-60) ? 1: 0;}
-    console.log(grassInFront, rockInFront);
-    if (this.classifier.predict([grassInFront, rockInFront])) {
+    var rockPos = lavas.getRockX(this.player.y-60) / 400;
+    if (this.classifier.predict([grassInFront, rockPos])) {
       this.player.moveUp();
       this.fitness++;
     }
@@ -105,7 +103,7 @@ class GeneticAlgorithm {
   update() {
     console.log(this.stepCount);
     this.stepCount++;
-    if (this.stepCount < (20000 / STEP_TIME)) {
+    if (this.stepCount < (1000 / STEP_TIME)) {
       this.makeDecisions();
       setTimeout(this.update.bind(this), STEP_TIME);
     }
