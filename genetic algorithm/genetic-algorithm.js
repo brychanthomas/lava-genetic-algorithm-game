@@ -85,14 +85,14 @@ class GeneticAlgorithm {
     setTimeout(this.update.bind(this), STEP_TIME);
   }
 
-  crossover(weights1, weights2) {
+  crossoverWeights(weights1, weights2) {
     let crossoverIndex = Math.floor(Math.random()*(weights1.length+1));
     let newWeights = weights1.slice().splice(0, crossoverIndex);
     newWeights = newWeights.concat(weights2.slice().splice(crossoverIndex));
     return newWeights;
   }
 
-  mutate(weights) {
+  mutateWeights(weights) {
     if (Math.random() < this.mutationProb) {
       let mutationIndex = Math.floor(Math.random() * weights.length)
       weights[mutationIndex] = (Math.random()*2) - 1;
@@ -114,7 +114,8 @@ class GeneticAlgorithm {
       this.makeDecisions();
       setTimeout(this.update.bind(this), STEP_TIME);
     } else {
-
+      this.sortPopulationByFitness();
+      this.normaliseFitnesses();
     }
   }
 
@@ -130,5 +131,21 @@ class GeneticAlgorithm {
     //y coordinates of the lava streams get mucked up because they are based on the
     //camera position and the camera is at weird positions while it is panning
     this.game.cameras.main.pan(200, bestY, STEP_TIME);
+  }
+
+  //sort the population by fitness in descending order.
+  sortPopulationByFitness() {
+    this.population.sort((a, b) => (a.fitness <= b.fitness) ? 1 : -1);
+  }
+
+  //divide the fitnesses by the total so that they add up to 1.
+  normaliseFitnesses() {
+    var fitnessTotal = 0;
+    for (let i=0; i<this.population.length; i++) {
+      fitnessTotal += this.population[i].fitness;
+    }
+    for (let i=0; i<this.population.length; i++) {
+      this.population[i].fitness /= fitnessTotal;
+    }
   }
 }
