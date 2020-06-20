@@ -103,9 +103,18 @@ class GeneticAlgorithm {
   update() {
     console.log(this.stepCount);
     this.stepCount++;
-    if (this.stepCount < (1000 / STEP_TIME)) {
+    var alive = false;
+    for (var i=0; i<this.population.length; i++) {
+      if (!this.population[i].dead) {
+        alive = true;
+        break;
+      }
+    }
+    if (this.stepCount < (10000 / STEP_TIME) && alive) {
       this.makeDecisions();
       setTimeout(this.update.bind(this), STEP_TIME);
+    } else {
+
     }
   }
 
