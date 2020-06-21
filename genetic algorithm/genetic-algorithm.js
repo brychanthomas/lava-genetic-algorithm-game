@@ -54,6 +54,7 @@ class Agent {
   reset() {
     this.fitness = 0;
     this.player.dead = false;
+    this.player.sprite.y = 420;
   }
 
   destroy() {
@@ -115,12 +116,16 @@ class GeneticAlgorithm {
         break;
       }
     }
-    if (this.stepCount < (10000 / STEP_TIME) && alive) {
+    if (this.stepCount < (4000 / STEP_TIME) && alive) {
       this.makeDecisions();
       setTimeout(this.update.bind(this), STEP_TIME);
     } else {
       this.sortPopulationByFitness();
       this.normaliseFitnesses();
+      this.createNewGeneration();
+      this.resetAgents();
+      this.stepCount = 0;
+      setTimeout(this.update.bind(this), STEP_TIME);
     }
   }
 
@@ -182,7 +187,6 @@ class GeneticAlgorithm {
       this.population[i].destroy();
     }
     this.population = newAgents;
-    this.resetAgents();
   }
 
   resetAgents() {

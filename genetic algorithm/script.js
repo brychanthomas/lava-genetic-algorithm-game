@@ -33,10 +33,10 @@ class Lava {
       }
     }
     //if it's off the bottom edge of the screen
-    if (this.y - this.image1.displayHeight/2 > this.game.cameras.main.midPoint.y+300) {
-      this.y = this.game.cameras.main.midPoint.y - 360;
-      return true; //return true if moved from bottom to top (so active state can be randomised)
-    }
+    //if (this.y - this.image1.displayHeight/2 > this.game.cameras.main.midPoint.y+300) {
+    //  this.y = this.game.cameras.main.midPoint.y - 360;
+    //  return true; //return true if moved from bottom to top (so active state can be randomised)
+    //}
     return false;
   }
 
@@ -85,15 +85,15 @@ class Lava {
 class LavaManager {
   constructor(game) {
     this.lavaSlots = [];
-    this.lavaSlots.push(new Lava(-60, game));
-    for (let y=0; y<=600; y=y+60) {
+    this.lavaSlots.push(new Lava(-600, game));
+    for (let y=540; y>=-600; y-=60) {
       this.lavaSlots.push(new Lava(y, game));
       this.lavaSlots[this.lavaSlots.length-1].activated = Math.random() >= 0.5;
       if (this.lavaSlots[this.lavaSlots.length-2].activated) {
         this.lavaSlots[this.lavaSlots.length-1].activated = false;
       }
     }
-    this.lavaSlots[8].activated = false; //deactivate lava where player spawns
+    this.lavaSlots[3].activated = false; //deactivate lava where player spawns
   }
 
   //move all of the lava rivers (so that they seem to be flowing)
