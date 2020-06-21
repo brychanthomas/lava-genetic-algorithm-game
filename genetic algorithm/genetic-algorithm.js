@@ -182,5 +182,12 @@ class GeneticAlgorithm {
       this.population[i].destroy();
     }
     this.population = newAgents;
+    this.resetAgents();
+  }
+
+  resetAgents() {
+    this.population.forEach(function(agent) {
+      agent.reset();
+    });
   }
 }
