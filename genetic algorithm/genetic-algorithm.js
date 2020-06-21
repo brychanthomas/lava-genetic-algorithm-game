@@ -88,6 +88,8 @@ class GeneticAlgorithm {
     this.stepCount = 0;
     this.lavas = lavas;
     this.game = game;
+    this.generation = 1;
+    this.bestFitness = 0;
     setTimeout(this.update.bind(this), STEP_TIME);
   }
 
@@ -116,7 +118,7 @@ class GeneticAlgorithm {
         break;
       }
     }
-    if (this.stepCount < (4000 / STEP_TIME) && alive) {
+    if (this.stepCount < (10000 / STEP_TIME) && alive) {
       this.makeDecisions();
       setTimeout(this.update.bind(this), STEP_TIME);
     } else {
@@ -125,6 +127,7 @@ class GeneticAlgorithm {
       this.createNewGeneration();
       this.resetAgents();
       this.stepCount = 0;
+      this.generation++;
       setTimeout(this.update.bind(this), STEP_TIME);
     }
   }
@@ -134,6 +137,7 @@ class GeneticAlgorithm {
     for (let agent of this.population) {
       if (!agent.dead) {
         agent.decide(this.lavas);
+        if (agent.fitness > this.bestFitness) {this.bestFitness = agent.fitness;}
         if (agent.y < bestY) {bestY = agent.y;}
       }
     }
@@ -190,6 +194,7 @@ class GeneticAlgorithm {
   }
 
   resetAgents() {
+    this.bestFitness = 0;
     this.population.forEach(function(agent) {
       agent.reset();
     });

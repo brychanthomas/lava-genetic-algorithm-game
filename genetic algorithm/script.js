@@ -219,11 +219,11 @@ function create () { //this function creates sprites at the start of the game
   ga = new GeneticAlgorithm(50, 0.2, lavas, this);
 
 
-  scoreText = this.add.text(0, -40, "Score: 0", {
+  infoText = this.add.text(0, -40, "Generation: 0\nBest: 0", {
     fontFamily: "Arial",
     fontSize: 25
   });
-  scoreText.depth = 10;
+  infoText.depth = 10;
 
   this.cameras.main.setBackgroundColor("#99ff66");
 
@@ -231,16 +231,18 @@ function create () { //this function creates sprites at the start of the game
 
 function update () { //this function runs every frame
   lavas.update();
+  infoText.y = this.cameras.main.midPoint.y- 250;
+  infoText.text = "Generation: "+ga.generation+"\nBest: "+ga.bestFitness;
 }
 
-function spacePressed() {
-  if (!player.dead) {
-    score += 1;
-    scoreText.y -= 60;
-    scoreText.text = "Score: "+score;
-    lavas.setSpeed(4 + 0.2*score);
-  }
-}
+// function spacePressed() {
+//   if (!player.dead) {
+//     score += 1;
+//     scoreText.y -= 60;
+//     scoreText.text = "Score: "+score;
+//     lavas.setSpeed(4 + 0.2*score);
+//   }
+// }
 
 function restart() {
   if (player.dead) {
