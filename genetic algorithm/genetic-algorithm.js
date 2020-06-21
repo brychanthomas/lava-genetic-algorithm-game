@@ -31,6 +31,7 @@ class LogisticRegressionClassifier {
 class Agent {
   constructor(game) {
     this.player = new Player(game);
+    this.player.sprite.alpha = 0.3;
     //2 parameters - whether there is grass directly ahead and whether
     //there is a rock directly ahead
     this.classifier = new LogisticRegressionClassifier(2);
@@ -38,7 +39,7 @@ class Agent {
   }
 
   decide(lavas) {
-    if (!lavas.checkIfPlayerSafe(this.player.y)) {
+    if (!lavas.checkIfPlayerSafe(this.player.y) || this.player.dead) {
       this.player.dead = true;
       return;
     }
@@ -53,6 +54,10 @@ class Agent {
   reset() {
     this.fitness = 0;
     this.player.dead = false;
+  }
+
+  destroy() {
+    this.player.sprite.destroy();
   }
 
   get dead() {
@@ -158,5 +163,24 @@ class GeneticAlgorithm {
       i++;
     }
     return this.population[i-1];
+  }
+
+  //generate children via crossover and mutation, implement elitism
+  //by keeping the top 20% of the previous generation
+  createNewGeneration() {
+    var newAgents = [];
+    while (newAgents.length < this.population.length * 0.8) {
+      var parent1 = this.pickAgent();
+      var parent2 = this.pickAgent();
+      var child = new Agent(this.game);
+      child.weights = this.crossoverWeights(parent1.weights, parent2.weights);
+      child.weights = this.mutateWeights(child.weights);
+      newAgents.push(child);
+    }
+    newAgents = newAgents.concat(this.population.splice(0, this.population.length-newAgents.length));
+    for (let i=0; i<this.population.length; i++) {
+      this.population[i].destroy();
+    }
+    this.population = newAgents;
   }
 }
