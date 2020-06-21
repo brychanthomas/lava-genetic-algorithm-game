@@ -41,10 +41,13 @@ class Agent {
   decide(lavas) {
     if (!lavas.checkIfPlayerSafe(this.player.y) || this.player.dead) {
       this.player.dead = true;
+      this.player.sprite.visible = false;
       return;
     }
     var grassInFront = lavas.checkIfGrass(this.player.y-60) ? 1 : 0;
     var rockPos = lavas.getRockX(this.player.y-60) / 400;
+    if (grassInFront) {rockPos = 0;}
+    console.log(grassInFront, rockPos);
     if (this.classifier.predict([grassInFront, rockPos])) {
       this.player.moveUp();
       this.fitness++;
@@ -55,6 +58,7 @@ class Agent {
     this.fitness = 0;
     this.player.dead = false;
     this.player.sprite.y = 420;
+    this.player.sprite.visible = true;
   }
 
   destroy() {
