@@ -129,7 +129,7 @@ class GeneticAlgorithm {
         break;
       }
     }
-    if (this.stepCount < (10000 / STEP_TIME) && alive) {
+    if (this.stepCount < (20000 / STEP_TIME) && alive) {
       this.makeDecisions();
       setTimeout(this.update.bind(this), STEP_TIME);
     } else {
