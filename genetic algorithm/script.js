@@ -87,7 +87,7 @@ class LavaManager {
     this.lavaSlots = [];
     this.lavaSlots.push(new Lava(-600, game));
     this.lavaSlots[0].activated = false;
-    for (let y=540; y>=-600; y-=60) {
+    for (let y=540; y>=-780; y-=60) {
       this.lavaSlots.push(new Lava(y, game));
       this.lavaSlots[this.lavaSlots.length-1].activated = Math.random() >= 0.5;
       if (this.lavaSlots[this.lavaSlots.length-2].activated) {
@@ -217,7 +217,7 @@ function preload () { //this function loads images before the game starts
 
 function create () { //this function creates sprites at the start of the game
   lavas = new LavaManager(this);
-  ga = new GeneticAlgorithm(200, 0.3, lavas, this);
+  ga = new GeneticAlgorithm(1, 0.3, lavas, this);
 
   infoText = this.add.text(0, -40, "Generation: 0\nBest: 0", {
     fontFamily: "Arial",

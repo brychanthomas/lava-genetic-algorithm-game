@@ -1,11 +1,15 @@
 var STEP_TIME = 200;
-var HARD_WEIGHTS = [-0.5, 10, -2];
+var PERFECT_WEIGHTS = new Array((400/10) + 2).fill(-1);
+PERFECT_WEIGHTS [1] = 10
+for (let i=15; i<25; i++) {
+  PERFECT_WEIGHTS[i] = 10;
+}
 
 class LogisticRegressionClassifier {
   constructor(noOfParams, threshold) {
     this.weights = [];
     for (let i=0; i<noOfParams+1; i++) {
-      this.weights.push(HARD_WEIGHTS[i]);//(Math.random()*2)-1);
+      this.weights.push(PERFECT_WEIGHTS[i]);//(Math.random()*2)-1);
     }
     this.threshold = threshold || 0.5;
   }
@@ -35,7 +39,7 @@ class Agent {
     this.player.sprite.alpha = 0.3;
     //2 parameters - whether there is grass directly ahead and whether
     //there is a rock directly ahead
-    this.classifier = new LogisticRegressionClassifier(2);
+    this.classifier = new LogisticRegressionClassifier((400/10) + 1);
     this.fitness = 0;
   }
 
@@ -46,9 +50,12 @@ class Agent {
       return;
     }
     var grassInFront = lavas.checkIfGrass(this.player.y-60) ? 1 : 0;
-    var rockPos = lavas.getRockX(this.player.y-60) / 400;
-    if (grassInFront) {rockPos = 0;}
-    if (this.classifier.predict([grassInFront, rockPos])) {
+    var rockPos = lavas.getRockX(this.player.y-60);
+    var rockPosArray = new Array(400 / 10).fill(0);
+    if (!grassInFront && rockPos > 0 && rockPos < 400) {
+      rockPosArray[Math.round(rockPos/10)] = 1;
+    }
+    if (this.classifier.predict([grassInFront].concat(rockPosArray))) {
       this.player.moveUp();
       this.fitness++;
     }
