@@ -150,6 +150,7 @@ class LavaManager {
         return !this.lavaSlots[i].activated;
       }
     }
+    return true;
   }
 
   getRockX(y) {
@@ -217,7 +218,7 @@ function preload () { //this function loads images before the game starts
 
 function create () { //this function creates sprites at the start of the game
   lavas = new LavaManager(this);
-  ga = new GeneticAlgorithm(1, 0.3, lavas, this);
+  ga = new GeneticAlgorithm(80, 0.3, lavas, this);
 
   infoText = this.add.text(0, -40, "Generation: 0\nBest: 0", {
     fontFamily: "Arial",

@@ -9,7 +9,7 @@ class LogisticRegressionClassifier {
   constructor(noOfParams, threshold) {
     this.weights = [];
     for (let i=0; i<noOfParams+1; i++) {
-      this.weights.push(PERFECT_WEIGHTS[i]);//(Math.random()*2)-1);
+      this.weights.push((Math.random()*2)-1);
     }
     this.threshold = threshold || 0.5;
   }
@@ -152,6 +152,7 @@ class GeneticAlgorithm {
         if (agent.y < bestY) {bestY = agent.y;}
       }
     }
+    this.lavas.setSpeed(4 + 0.2 * this.bestFitness);
     this.game.cameras.main.midPoint.y = bestY; //if I don't do this the
     //y coordinates of the lava streams get mucked up because they are based on the
     //camera position and the camera is at weird positions while it is panning
@@ -209,5 +210,11 @@ class GeneticAlgorithm {
     this.population.forEach(function(agent) {
       agent.reset();
     });
+    this.lavas.setSpeed(4);
+  }
+
+  createPerfection() {
+    this.population[0].weights = PERFECT_WEIGHTS;
+    this.population[0].fitness = 20;
   }
 }
