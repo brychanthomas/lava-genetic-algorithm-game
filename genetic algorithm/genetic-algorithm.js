@@ -1,10 +1,11 @@
 var STEP_TIME = 200;
+var HARD_WEIGHTS = [-0.5, 10, -2];
 
 class LogisticRegressionClassifier {
   constructor(noOfParams, threshold) {
     this.weights = [];
     for (let i=0; i<noOfParams+1; i++) {
-      this.weights.push((Math.random()*2)-1);
+      this.weights.push(HARD_WEIGHTS[i]);//(Math.random()*2)-1);
     }
     this.threshold = threshold || 0.5;
   }
@@ -47,7 +48,6 @@ class Agent {
     var grassInFront = lavas.checkIfGrass(this.player.y-60) ? 1 : 0;
     var rockPos = lavas.getRockX(this.player.y-60) / 400;
     if (grassInFront) {rockPos = 0;}
-    console.log(grassInFront, rockPos);
     if (this.classifier.predict([grassInFront, rockPos])) {
       this.player.moveUp();
       this.fitness++;

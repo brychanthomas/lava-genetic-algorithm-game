@@ -219,7 +219,6 @@ function create () { //this function creates sprites at the start of the game
   lavas = new LavaManager(this);
   ga = new GeneticAlgorithm(200, 0.3, lavas, this);
 
-
   infoText = this.add.text(0, -40, "Generation: 0\nBest: 0", {
     fontFamily: "Arial",
     fontSize: 25
