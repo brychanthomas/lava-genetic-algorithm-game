@@ -32,12 +32,17 @@ class Lava {
         this.rockImage.x = -this.rockImage.displayWidth/2 - Math.floor(Math.random() * 301);
       }
     }
-    //if it's off the bottom edge of the screen
+    //this has been disabled in this version - not all of the agents
+    //will be in the same position so we can't really move the lava
+    //depending on where the camera is. Instead we just create extra
+    //lavas above the screen at the start.
+
+    //if the lava is off the bottom of the screen
     //if (this.y - this.image1.displayHeight/2 > this.game.cameras.main.midPoint.y+300) {
     //  this.y = this.game.cameras.main.midPoint.y - 360;
     //  return true; //return true if moved from bottom to top (so active state can be randomised)
     //}
-    return false;
+    //return false;
   }
 
   //check if it is safe for the player to stand on the lava
@@ -98,18 +103,17 @@ class LavaManager {
   }
 
   //move all of the lava rivers (so that they seem to be flowing)
-  //and randomly activate or deactivate them when they move from
-  //the bottom to the top
   update() {
     for (let i=0; i<this.lavaSlots.length; i++) {
-      let movedToTop = this.lavaSlots[i].update();
-      if (movedToTop) {
-        this.lavaSlots[i].activated = Math.random() >= 0.5;
-        if (this.lavaSlots[(i+1) % 12].activated) {
-          //if neighbour is activated, deactivate
-          this.lavaSlots[i].activated = false;
-        }
-      }
+      this.lavaSlots[i].update();
+      //lavas don't move to top in this version, they stay at their y coordinate
+      //if (movedToTop) {
+        //this.lavaSlots[i].activated = Math.random() >= 0.5;
+        //if (this.lavaSlots[(i+1) % 12].activated) {
+        //  //if neighbour is activated, deactivate
+        //  this.lavaSlots[i].activated = false;
+        //}
+      //}
     };
   }
 
