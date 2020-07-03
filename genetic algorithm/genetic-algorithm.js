@@ -193,9 +193,6 @@ class GeneticAlgorithm {
     }
     //increase lava speed as best fitness increases
     this.lavas.setSpeed(4 + 0.2 * this.bestFitness);
-    //this.game.cameras.main.midPoint.y = bestY; //if I don't do this the
-    //y coordinates of the lava streams get mucked up because they are based on the
-    //camera position and the camera is at weird positions while it is panning
     //move camera to see best agent
     this.game.cameras.main.pan(200, bestY, STEP_TIME);
   }

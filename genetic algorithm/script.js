@@ -239,23 +239,3 @@ function update () { //this function runs every frame
   infoText.y = this.cameras.main.midPoint.y- 250;
   infoText.text = "Generation: "+ga.generation+"\nBest: "+ga.bestFitness;
 }
-
-// function spacePressed() {
-//   if (!player.dead) {
-//     score += 1;
-//     scoreText.y -= 60;
-//     scoreText.text = "Score: "+score;
-//     lavas.setSpeed(4 + 0.2*score);
-//   }
-// }
-
-function restart() {
-  if (player.dead) {
-    lavas.restart(player.y);
-    player.dead = false;
-    gameOverText.visible = false;
-    score = 0;
-    scoreText.text = "Score: 0";
-    lavas.setSpeed(4);
-  }
-}
