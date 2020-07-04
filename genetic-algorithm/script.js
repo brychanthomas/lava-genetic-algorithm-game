@@ -92,7 +92,7 @@ class LavaManager {
     this.lavaSlots = [];
     this.lavaSlots.push(new Lava(-600, game));
     this.lavaSlots[0].activated = false;
-    for (let y=540; y>=-780; y-=60) {
+    for (let y=540; y>=-1380; y-=60) {
       this.lavaSlots.push(new Lava(y, game));
       this.lavaSlots[this.lavaSlots.length-1].activated = Math.random() >= 0.5;
       if (this.lavaSlots[this.lavaSlots.length-2].activated) {
