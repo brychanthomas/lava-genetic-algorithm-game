@@ -1,4 +1,4 @@
-var STEP_TIME = 200;
+const STEP_TIME = 200;
 var PERFECT_WEIGHTS = new Array((400/10) + 2).fill(-1);
 PERFECT_WEIGHTS [1] = 10;
 for (let i=15; i<25; i++) {
@@ -166,7 +166,7 @@ class GeneticAlgorithm {
     if (this.stepCount < (20000 / STEP_TIME) && alive) {
       //allows all of the agents to make a decision
       this.makeDecisions();
-    } else { //if generation has gone on for more than 20 seconds
+    } else { //if generation has gone on for more than 20 seconds / none alive
       //sort population array based on fitness of agents
       this.sortPopulationByFitness();
       this.normaliseFitnesses();

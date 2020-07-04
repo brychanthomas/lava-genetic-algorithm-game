@@ -206,7 +206,6 @@ var config = { //create configuration for game
 var game = new Phaser.Game(config); //create the game object
 
 //initialise global variables
-var player;
 var lavas;
 var gameOverText, scoreText;
 var score = 0;
